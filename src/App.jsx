@@ -1,20 +1,57 @@
-import React, { useState } from 'react';
-import { ethers } from 'ethers';
+import React, { useState, useEffect } from 'react';
+import {JsonRpcProvider, ethers } from 'ethers';
+import contractABI from './contractABI.json';
 
 function App() {
   const [votesForCandidate1, setVotesForCandidate1] = useState(0);
   const [votesForCandidate2, setVotesForCandidate2] = useState(0);
 
+  //const provider = new JsonRpcProvider(import.meta.env.VITE_ALCHEMY_ENDPOINT);
+ 
+
+  const provider =  new JsonRpcProvider(import.meta.env.VITE_ALCHEMY_ENDPOINT);
+
+  // const signer = provider.getSigner();
+  // console.log(provider)
+  const contractAddress = '0xcc61c44548216e974ee596dabe6e6e5c52a5b60c';
+  const contract = new ethers.Contract(contractAddress, contractABI);
+
+  //console.log(contract);
   
 
-  const castVote = (candidateId) => {
-    console.log(`Vote for Candidate ${candidateId}`);
-    if (candidateId === 1) {
-      setVotesForCandidate1(votesForCandidate1 + 1);
-    } else if (candidateId === 2) {
-      setVotesForCandidate2(votesForCandidate2 + 1);
+  const getTotalVotesForCandidate1 = async () => {
+    const votes = await contract.totalVotesForCandidate1();
+    setVotesForCandidate1(votes.toNumber());
+  };
+
+  const getTotalVotesForCandidate2 = async () => {
+    const votes = await contract.totalVotesForCandidate2();
+    setVotesForCandidate2(votes.toNumber());
+  };
+
+  const castVote = async (candidateId) => {
+    try {
+      const signerAddress = await provider.getSigner();
+      if (!signerAddress) {
+        alert('Please connect to a wallet');
+        return;
+      }
+  
+      await contract.vote(candidateId);
+      if (candidateId === 1) {
+        getTotalVotesForCandidate1();
+      } else if (candidateId === 2) {
+        getTotalVotesForCandidate2();
+      }
+    } catch (error) {
+      console.error('Error casting vote:', error);
     }
   };
+
+  useEffect(() => {
+    getTotalVotesForCandidate1();
+    getTotalVotesForCandidate2();
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
