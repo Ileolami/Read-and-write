@@ -1,7 +1,6 @@
 import React from 'react'
 import { createThirdwebClient } from 'thirdweb';
-import { ConnectButton } from 'thirdweb/react'
-import { createWallet, inAppWallet, injectedProvider } from 'thirdweb/wallets';
+import { createWallet,  injectedProvider } from 'thirdweb/wallets';
 
 const client = createThirdwebClient({ clientId: 'b48165bc64b4817f7ea74fe38dc2fc82' });
 const metamask = createWallet("io.metamask"); // pass the wallet id
