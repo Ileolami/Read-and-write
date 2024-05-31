@@ -74,9 +74,9 @@ function App() {
 
 
   return (
-    <>
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <main className="min-h-screen bg-gray-100 my-10">
       <Navbar />
+    <div className='grid place-content-center'>
           <h1 className="mb-6 text-3xl font-bold text-gray-700">Simple Voting DApp</h1>
           <button 
             onClick={() => castVote(1)} 
@@ -90,10 +90,12 @@ function App() {
           >
             Vote for Candidate 2
           </button>
-          <h2 className="mt-6 text-2xl text-gray-700">Results:</h2>
+        <div className='flex flex-col justify-center items-center'>
+        <h2 className="mt-6 text-2xl text-gray-700 font-bold">Results</h2>
           <p className="text-gray-700">Votes for Candidate 1: {votesForCandidate1}</p>
           <p className="text-gray-700">Votes for Candidate 2: {votesForCandidate2}</p>
-        </div></>
+        </div>
+        </div></main>
       );
 }
 
